@@ -1,0 +1,129 @@
+**Q1)A Write a python program to simulate a simple reflex agent for fan control.**
+
+temperature = int(input("Enter room temperature: "))
+
+if temperature >= 30:
+    action = "Fan ON"
+elif temperature >= 20:
+    action = "Fan at LOW speed"
+else:
+    action = "Fan OFF"
+
+print("Temperature:", temperature, "°C")
+print("Agent Action:", action)
+
+
+**Q2)B Write a python program to develop fitness predictors using Random Forest Classification to predict whether a person is FIT or UNFIT based on: Age, Exercise Hours
+per Week Accept the input from user and predict for multiple people**
+
+
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+data = {
+    'Age': [18, 20, 22, 25, 28, 30, 35, 40, 45, 50],
+    'Exercise_Hours': [6, 7, 5, 6, 4, 5, 3, 2, 2, 1],
+    'Fitness': [
+        'FIT', 'FIT', 'FIT', 'FIT', 'FIT',
+        'FIT', 'UNFIT', 'UNFIT', 'UNFIT', 'UNFIT'
+    ]
+}
+
+df = pd.DataFrame(data)
+
+print("Training Data:")
+print(df)
+
+X = df[['Age', 'Exercise_Hours']]
+
+Y = df['Fitness']
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+model.fit(X, Y)
+
+n = int(input("\nEnter number of people: "))
+
+people = []
+
+for i in range(n):
+    print("\nPerson", i + 1)
+    age = int(input("Enter Age: "))
+    exercise = float(input("Enter Exercise Hours per Week: "))
+    people.append([age, exercise])
+
+input_df = pd.DataFrame(
+    people,
+    columns=['Age', 'Exercise_Hours']
+)
+
+predictions = model.predict(input_df)
+
+print("\nFitness Prediction:")
+print("------------------------------")
+
+for i in range(n):
+    print(
+        "Person", i + 1,
+        "Age:", input_df.iloc[i]['Age'],
+        "Exercise Hours:", input_df.iloc[i]['Exercise_Hours'],
+        "Fitness:", predictions[i]
+    )
+
+
+
+OR
+**Q2)B.Write a python program to simulate n-Queens problem**
+
+def is_safe(board, row, col, n):
+    for i in range(row):
+        if board[i] == col:
+            return False
+
+    for i in range(row):
+        if board[i] - i == col - row:
+            return False
+
+    for i in range(row):
+        if board[i] + i == col + row:
+            return False
+
+    return True
+
+
+def solve_n_queens(board, row, n):
+    if row == n:
+        return True
+
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            board[row] = col
+
+            if solve_n_queens(board, row + 1, n):
+                return True
+
+            board[row] = -1
+
+    return False
+
+
+n = int(input("Enter the value of N: "))
+
+board = [-1] * n
+
+if solve_n_queens(board, 0, n):
+    print("\nSolution:")
+    for row in range(n):
+        for col in range(n):
+            if board[row] == col:
+                print("Q", end=" ")
+            else:
+                print(".", end=" ")
+        print()
+else:
+    print("No solution exists.")
+
+
+
+
+
