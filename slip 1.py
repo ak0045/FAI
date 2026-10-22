@@ -1,0 +1,114 @@
+**Q1) A Write a python program to show proper indentation using if statement**
+
+num = int(input("Enter a number: ")) 
+if num > 0: 
+    print("The number is positive.") 
+    print("This statement is inside the if block.") 
+    print("Program execution completed.")
+
+
+**Q2)B Write a python program to implement Water Jug Problem [20 marks]**
+
+from collections import deque
+
+def water_jug_problem(capacity1, capacity2, target):
+    visited = set()
+    queue = deque()
+
+    queue.append(((0, 0), []))
+    visited.add((0, 0))
+
+    while queue:
+        (jug1, jug2), path = queue.popleft()
+
+        if jug1 == target or jug2 == target:
+            print("\nSolution Path:")
+            for step in path:
+                print(step)
+            print("Goal State:", (jug1, jug2))
+            return
+
+        states = []
+
+        states.append(((capacity1, jug2), "Fill Jug 1"))
+        states.append(((jug1, capacity2), "Fill Jug 2"))
+        states.append(((0, jug2), "Empty Jug 1"))
+        states.append(((jug1, 0), "Empty Jug 2"))
+
+        amount = min(jug1, capacity2 - jug2)
+        states.append(
+            ((jug1 - amount, jug2 + amount), "Pour Jug 1 -> Jug 2")
+        )
+
+        amount = min(jug2, capacity1 - jug1)
+        states.append(
+            ((jug1 + amount, jug2 - amount), "Pour Jug 2 -> Jug 1")
+        )
+
+        for new_state, action in states:
+            if new_state not in visited:
+                visited.add(new_state)
+                queue.append((new_state, path + [action]))
+
+    print("No solution exists.")
+
+
+capacity1 = 4
+capacity2 = 3
+target = 2
+
+print("Water Jug Problem")
+print("Jug 1 Capacity:", capacity1, "litres")
+print("Jug 2 Capacity:", capacity2, "litres")
+print("Target:", target, "litres")
+
+water_jug_problem(capacity1, capacity2, target)
+
+
+OR 
+**Q2)B Write a python program to design a Model-Based Agent that maintains an internal state of room cleanliness and decides actions based on both current perception and stored memory**
+
+class ModelBasedAgent:
+    def __init__(self):
+        self.room_state = {
+            "Room": "Unknown"
+        }
+
+    def perceive(self, room):
+        return room
+
+    def update_state(self, room, perception):
+        self.room_state[room] = perception
+
+    def choose_action(self, room):
+        if self.room_state[room] == "Dirty":
+            return "Clean the room"
+        elif self.room_state[room] == "Clean":
+            return "Room is already clean"
+        else:
+            return "Check the room"
+
+    def run(self, room, perception):
+        current_perception = self.perceive(perception)
+
+        self.update_state(room, current_perception)
+
+        action = self.choose_action(room)
+
+        print("Current Perception :", current_perception)
+        print("Internal State     :", self.room_state[room])
+        print("Action             :", action)
+
+
+agent = ModelBasedAgent()
+
+print("First Observation")
+agent.run("Room", "Dirty")
+
+print("\nSecond Observation")
+agent.run("Room", "Clean")
+
+
+
+
+
